@@ -48,6 +48,7 @@
                             <group>
                                 <group>
                                     <field name="description" />
+                                    <field name="state" />
                                     <field name="bedrooms" />
                                     <field name="living_area" />
                                     <field name="facades" />
@@ -55,7 +56,6 @@
                                     <field name="garden" />
                                     <field name="garden_area" />
                                     <field name="garden_orientation" />
-                                    
                                 </group>
                                 
                             </group>
@@ -63,6 +63,25 @@
                     </notebook>
                 </sheet>
             </form>
+        </field>
+    </record>
+
+    <record id="estate_property_view_search" model="ir.ui.view">
+        <field name="name">estate.property.view.search</field>
+        <field name="model">estate.property</field>
+        <field name="arch" type="xml">
+            <search string="Estate Property search">
+                <field name="name" />
+                <field name="postcode" />
+                <field name="bedrooms" />
+                <field name="living_area" />
+                <field name="facades" />
+                
+                <filter string="Available" name="active" domain="['|', ('state', '=', 'new'), ('state', '=', 'offer_received')]"/>
+                <group expand="1" string="Group By">
+                    <filter string="Postcode" name="postcode" context="{'group_by':'postcode', 'residual_visible':True}"/>
+                </group>
+            </search>
         </field>
     </record>
 </odoo>
