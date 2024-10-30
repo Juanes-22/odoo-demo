@@ -3,6 +3,7 @@
 from odoo import models, fields
 from datetime import datetime, timedelta
 
+
 class EstateProperty(models.Model):
     _name = "estate.property"
     _description = "A Estate Property"
@@ -11,7 +12,9 @@ class EstateProperty(models.Model):
     name = fields.Char(required=True)
     description = fields.Text()
     postcode = fields.Char()
-    date_availability = fields.Date(copy=False, default=lambda self: (datetime.today() + timedelta(days=90)).date())
+    date_availability = fields.Date(
+        copy=False, default=lambda self: (datetime.today() + timedelta(days=90)).date()
+    )
     expected_price = fields.Float(required=True)
     selling_price = fields.Float(readonly=True, copy=False)
     bedrooms = fields.Integer(default=2)
@@ -28,14 +31,14 @@ class EstateProperty(models.Model):
             ("west", "West"),
         ]
     )
-    active = fields.Boolean(default=False)
+    active = fields.Boolean(default=True)
     state = fields.Selection(
         [
             ("new", "New"),
             ("offer_received", "Offer Received"),
             ("offer_accepted", "Offer Accepted"),
             ("sold", "Sold"),
-            ("cancelled", "Cancelled")
+            ("cancelled", "Cancelled"),
         ],
-        default="new"
+        default="new",
     )
