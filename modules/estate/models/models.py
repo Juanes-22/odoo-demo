@@ -42,3 +42,11 @@ class EstateProperty(models.Model):
         ],
         default="new",
     )
+    property_type_id = fields.Many2one("estate.property.type", string="Property Type")
+
+class EstatePropertyType(models.Model):
+    _name = "estate.property.type"
+    _description = "A Estate Property Type"
+
+    id = fields.Integer()
+    name = fields.Char(required=True)
