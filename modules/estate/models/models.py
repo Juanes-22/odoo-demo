@@ -57,6 +57,19 @@ class EstateProperty(models.Model):
     total_area = fields.Float(compute="_compute_total_area")
     best_price = fields.Float(compute="_compute_best_price", string="Best Offer")
 
+    _sql_constraints = [
+        (
+            "check_expected_price",
+            "CHECK(expected_price >= 0)",
+            "Property expected price must be strictly positive",
+        ),
+        (
+            "check_selling_price",
+            "CHECK(selling_price >= 0)",
+            "Property selling price must be strictly positive",
+        ),
+    ]
+
     @api.depends("living_area", "garden_area")
     def _compute_total_area(self):
         for record in self:
@@ -97,6 +110,14 @@ class EstatePropertyType(models.Model):
     id = fields.Integer()
     name = fields.Char(required=True)
 
+    _sql_constraints = [
+        (
+            "type_name_unique",
+            "unique(name)",
+            "Estate property type name must be unique",
+        ),
+    ]
+
 
 class EstatePropertyTag(models.Model):
     _name = "estate.property.tag"
@@ -104,6 +125,10 @@ class EstatePropertyTag(models.Model):
 
     id = fields.Integer()
     name = fields.Char(required=True)
+
+    _sql_constraints = [
+        ("tag_name_unique", "unique(name)", "Estate property tag name must be unique"),
+    ]
 
 
 class EstatePropertyOffer(models.Model):
@@ -120,6 +145,14 @@ class EstatePropertyOffer(models.Model):
         "res.partner", string="Partner", copy=False, required=True
     )
     property_id = fields.Many2one("estate.property", required=True)
+
+    _sql_constraints = [
+        (
+            "check_offer_price",
+            "CHECK(offer_price >= 0)",
+            "Offer price must be strictly positive",
+        ),
+    ]
 
     def accept_offer(self):
         for record in self:
