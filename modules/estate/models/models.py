@@ -3,7 +3,8 @@
 from odoo import models, fields, api
 from datetime import datetime, timedelta
 
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
+from odoo.tools.float_utils import float_compare, float_is_zero
 
 
 class EstateProperty(models.Model):
@@ -85,6 +86,22 @@ class EstateProperty(models.Model):
     def _onchange_garden(self):
         self.garden_area = 10 if self.garden else 0
         self.garden_orientation = "north" if self.garden else ""
+
+    @api.constrains("selling_price", "expected_price")
+    def _check_selling_price(self):
+        for record in self:
+            selling_price_lower_than_expected_price = (
+                float_compare(record.selling_price, record.expected_price * 0.9, 2)
+                == -1
+            )
+            if (
+                not float_is_zero(record.selling_price, 2)
+                and selling_price_lower_than_expected_price
+            ):
+                raise ValidationError(
+                    "The selling price must be at least 90% of the expected price! "
+                    "You must reduce the expected price if you want to accept this offer."
+                )
 
     def sold_property(self):
         if self.state == "cancelled":
