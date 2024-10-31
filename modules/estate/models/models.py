@@ -3,6 +3,8 @@
 from odoo import models, fields, api
 from datetime import datetime, timedelta
 
+from odoo.exceptions import UserError
+
 
 class EstateProperty(models.Model):
     _name = "estate.property"
@@ -71,6 +73,22 @@ class EstateProperty(models.Model):
         self.garden_area = 10 if self.garden else 0
         self.garden_orientation = "north" if self.garden else ""
 
+    def sold_property(self):
+        if self.state == "cancelled":
+            raise UserError("Cancelled properties cannot be sold")
+
+        for record in self:
+            record.state = "sold"
+        return True
+
+    def cancel_property(self):
+        if self.state == "sold":
+            raise UserError("Sold properties cannot be cancelled")
+
+        for record in self:
+            record.state = "cancelled"
+        return True
+
 
 class EstatePropertyType(models.Model):
     _name = "estate.property.type"
@@ -102,3 +120,16 @@ class EstatePropertyOffer(models.Model):
         "res.partner", string="Partner", copy=False, required=True
     )
     property_id = fields.Many2one("estate.property", required=True)
+
+    def accept_offer(self):
+        for record in self:
+            record.status = "accepted"
+            record.property_id.buyer_id = record.partner_id.id
+            record.property_id.selling_price = record.price
+
+        return True
+
+    def refuse_offer(self):
+        for record in self:
+            record.status = "refused"
+        return True
