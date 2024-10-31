@@ -66,6 +66,11 @@ class EstateProperty(models.Model):
             offers = record.property_offer_ids.mapped("price")
             record.best_price = max(offers) if offers else 0
 
+    @api.onchange("garden")
+    def _onchange_garden(self):
+        self.garden_area = 10 if self.garden else 0
+        self.garden_orientation = "north" if self.garden else ""
+
 
 class EstatePropertyType(models.Model):
     _name = "estate.property.type"
