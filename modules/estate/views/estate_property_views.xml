@@ -29,15 +29,18 @@
         <field name="arch" type="xml">
             <form string="Create a new Estate Property">
                 <header>
-                    <button string="Sold" name="sold_property" type="object" class="oe_highlight" states="new,offer_received,offer_accepted" />
-                    <button string="Cancel" name="cancel_property" type="object" states="new,offer_received,offer_accepted" />
-                    <field name="state" widget="statusbar" colspan="2" options="{'clickable': 1}"/>
+                    <button string="Sold" name="sold_property" type="object" class="oe_highlight"
+                        states="new,offer_received,offer_accepted" />
+                    <button string="Cancel" name="cancel_property" type="object"
+                        states="new,offer_received,offer_accepted" />
+                    <field name="state" widget="statusbar" colspan="2" options="{'clickable': 1}" />
                 </header>
                 <sheet>
                     <div class="oe_title">
                         <h1 class="mb32">
                             <field name="name" class="mb16" />
-                            <field name="property_tag_ids" widget="many2many_tags" options="{'color_field': 'color'}" />
+                            <field name="property_tag_ids" widget="many2many_tags"
+                                options="{'color_field': 'color'}" />
                         </h1>
                     </div>
                     <group>
@@ -62,8 +65,10 @@
                                     <field name="facades" />
                                     <field name="garage" />
                                     <field name="garden" />
-                                    <field name="garden_area" />
-                                    <field name="garden_orientation" />
+                                    <field name="garden_area"
+                                        attrs="{'invisible': [('garden', '=', False)]}" />
+                                    <field name="garden_orientation"
+                                        attrs="{'invisible': [('garden', '=', False)]}" />
                                     <field name="total_area" />
                                 </group>
 
@@ -71,15 +76,18 @@
                         </page>
 
                         <page string="Offers">
-                            <field name="property_offer_ids">
+                            <field name="property_offer_ids"
+                                attrs="{'readonly': ['|', '|', ('state', '=', 'offer_accepted'), ('state', '=', 'sold'), ('state', '=', 'cancelled')]}">
                                 <tree>
                                     <field name="price" />
                                     <field name="partner_id" />
                                     <field name="status" />
                                     <button name="accept_offer" type="object" title="Accept"
-                                        icon="fa-check" />
+                                        icon="fa-check"
+                                        attrs="{'invisible': [('status', '!=', False)]}" />
                                     <button name="refuse_offer" type="object" title="Refuse"
-                                        icon="fa-times" />
+                                        icon="fa-times"
+                                        attrs="{'invisible': [('status', '!=', False)]}" />
                                 </tree>
                             </field>
                         </page>
