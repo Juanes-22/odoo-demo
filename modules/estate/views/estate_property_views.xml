@@ -4,6 +4,7 @@
         <field name="name">Create a new Estate Property</field>
         <field name="res_model">estate.property</field>
         <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_active': True}</field>
     </record>
 
     <record id="estate_property_view_tree" model="ir.ui.view">
@@ -16,6 +17,8 @@
                 <field name="name" />
                 <field name="property_type_id" />
                 <field name="postcode" />
+                <field name="property_tag_ids" widget="many2many_tags"
+                    options="{'color_field': 'color'}" string="Property Tags" />
                 <field name="bedrooms" />
                 <field name="living_area" />
                 <field name="expected_price" />
@@ -117,7 +120,7 @@
                 <field name="name" />
                 <field name="postcode" />
                 <field name="bedrooms" />
-                <field name="living_area" />
+                <field name="living_area" string="Living Area" filter_domain="[('living_area', '>=', self)]" />
                 <field name="facades" />
                 <field name="property_type_id" />
 
