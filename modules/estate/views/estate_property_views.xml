@@ -29,14 +29,15 @@
         <field name="arch" type="xml">
             <form string="Create a new Estate Property">
                 <header>
-                    <button string="Sold" name="sold_property" type="object" class="oe_highlight"/>
+                    <button string="Sold" name="sold_property" type="object" class="oe_highlight" />
                     <button string="Cancel" name="cancel_property" type="object" />
+                    <field name="state" widget="statusbar" nolabel="1" colspan="2" />
                 </header>
                 <sheet>
                     <div class="oe_title">
                         <h1 class="mb32">
-                            <field name="name" class="mb16"/>
-                            <field name="property_tag_ids" widget="many2many_tags"/>
+                            <field name="name" class="mb16" />
+                            <field name="property_tag_ids" widget="many2many_tags" />
                         </h1>
                     </div>
                     <group>
@@ -56,7 +57,6 @@
                             <group>
                                 <group>
                                     <field name="description" />
-                                    <field name="state" />
                                     <field name="bedrooms" />
                                     <field name="living_area" />
                                     <field name="facades" />
@@ -66,22 +66,24 @@
                                     <field name="garden_orientation" />
                                     <field name="total_area" />
                                 </group>
-                                
+
                             </group>
                         </page>
 
                         <page string="Offers">
                             <field name="property_offer_ids">
                                 <tree>
-                                    <field name="price"/>
-                                    <field name="partner_id"/>
-                                    <field name="status"/>
-                                    <button name="accept_offer" type="object" title="Accept" icon="fa-check"/>
-                                    <button name="refuse_offer" type="object" title="Refuse" icon="fa-times"/>
+                                    <field name="price" />
+                                    <field name="partner_id" />
+                                    <field name="status" />
+                                    <button name="accept_offer" type="object" title="Accept"
+                                        icon="fa-check" />
+                                    <button name="refuse_offer" type="object" title="Refuse"
+                                        icon="fa-times" />
                                 </tree>
                             </field>
                         </page>
-    
+
                         <page string="Other Info">
                             <group>
                                 <group>
@@ -108,9 +110,11 @@
                 <field name="facades" />
                 <field name="property_type_id" />
 
-                <filter string="Available" name="active" domain="['|', ('state', '=', 'new'), ('state', '=', 'offer_received')]"/>
+                <filter string="Available" name="active"
+                    domain="['|', ('state', '=', 'new'), ('state', '=', 'offer_received')]" />
                 <group expand="1" string="Group By">
-                    <filter string="Postcode" name="postcode" context="{'group_by':'postcode', 'residual_visible':True}"/>
+                    <filter string="Postcode" name="postcode"
+                        context="{'group_by':'postcode', 'residual_visible':True}" />
                 </group>
             </search>
         </field>
