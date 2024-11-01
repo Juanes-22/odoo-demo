@@ -126,6 +126,9 @@ class EstatePropertyType(models.Model):
 
     id = fields.Integer()
     name = fields.Char(required=True)
+    property_ids = fields.One2many(
+        "estate.property", "property_type_id", "Estate Properties"
+    )
 
     _sql_constraints = [
         (
