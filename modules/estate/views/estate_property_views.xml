@@ -10,7 +10,9 @@
         <field name="name">estate.property.view.tree</field>
         <field name="model">estate.property</field>
         <field name="arch" type="xml">
-            <tree string="Estate Property">
+            <tree string="Estate Property"
+                decoration-success="state in ('offer_received', 'offer_accepted')"
+                decoration-bf="state == 'offer_accepted'" decoration-muted="state == 'sold'">
                 <field name="name" />
                 <field name="property_type_id" />
                 <field name="postcode" />
@@ -18,7 +20,8 @@
                 <field name="living_area" />
                 <field name="expected_price" />
                 <field name="selling_price" />
-                <field name="date_availability" />
+                <field name="date_availability" optional="hide" />
+                <field name="state" optional="hide" />
             </tree>
         </field>
     </record>
@@ -40,7 +43,7 @@
                         <h1 class="mb32">
                             <field name="name" class="mb16" />
                             <field name="property_tag_ids" widget="many2many_tags"
-                                options="{'color_field': 'color'}" />
+                                options="{'color_field': 'color'}" editable="true" />
                         </h1>
                     </div>
                     <group>
@@ -71,17 +74,17 @@
                                         attrs="{'invisible': [('garden', '=', False)]}" />
                                     <field name="total_area" />
                                 </group>
-
                             </group>
                         </page>
 
                         <page string="Offers">
                             <field name="property_offer_ids"
                                 attrs="{'readonly': ['|', '|', ('state', '=', 'offer_accepted'), ('state', '=', 'sold'), ('state', '=', 'cancelled')]}">
-                                <tree>
+                                <tree editable="true" decoration-success="status=='accepted'"
+                                    decoration-danger="status=='refused'">
                                     <field name="price" />
                                     <field name="partner_id" />
-                                    <field name="status" />
+                                    <field name="status" optional="hide" />
                                     <button name="accept_offer" type="object" title="Accept"
                                         icon="fa-check"
                                         attrs="{'invisible': [('status', '!=', False)]}" />
