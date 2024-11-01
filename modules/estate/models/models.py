@@ -10,6 +10,7 @@ from odoo.tools.float_utils import float_compare, float_is_zero
 class EstateProperty(models.Model):
     _name = "estate.property"
     _description = "A Estate Property"
+    _order = "id desc"
 
     id = fields.Integer()
     name = fields.Char(required=True)
@@ -123,12 +124,14 @@ class EstateProperty(models.Model):
 class EstatePropertyType(models.Model):
     _name = "estate.property.type"
     _description = "A Estate Property Type"
+    _order = "sequence, name"
 
     id = fields.Integer()
     name = fields.Char(required=True)
     property_ids = fields.One2many(
         "estate.property", "property_type_id", "Estate Properties"
     )
+    sequence = fields.Integer("Sequence", default=1)
 
     _sql_constraints = [
         (
@@ -142,6 +145,7 @@ class EstatePropertyType(models.Model):
 class EstatePropertyTag(models.Model):
     _name = "estate.property.tag"
     _description = "A Estate Property Tag"
+    _order = "name"
 
     id = fields.Integer()
     name = fields.Char(required=True)
@@ -154,6 +158,7 @@ class EstatePropertyTag(models.Model):
 class EstatePropertyOffer(models.Model):
     _name = "estate.property.offer"
     _description = "A Estate Property Offer"
+    _order = "price desc"
 
     id = fields.Integer()
     price = fields.Float(required=True)
