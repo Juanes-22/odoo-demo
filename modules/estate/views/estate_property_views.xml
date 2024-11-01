@@ -29,9 +29,9 @@
         <field name="arch" type="xml">
             <form string="Create a new Estate Property">
                 <header>
-                    <button string="Sold" name="sold_property" type="object" class="oe_highlight" />
-                    <button string="Cancel" name="cancel_property" type="object" />
-                    <field name="state" widget="statusbar" nolabel="1" colspan="2" />
+                    <button string="Sold" name="sold_property" type="object" class="oe_highlight" states="new,offer_received,offer_accepted" />
+                    <button string="Cancel" name="cancel_property" type="object" states="new,offer_received,offer_accepted" />
+                    <field name="state" widget="statusbar" colspan="2" options="{'clickable': 1}"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
