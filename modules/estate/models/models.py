@@ -132,6 +132,10 @@ class EstatePropertyType(models.Model):
         "estate.property", "property_type_id", "Estate Properties"
     )
     sequence = fields.Integer("Sequence", default=1)
+    offer_ids = fields.One2many(
+        "estate.property.offer", "property_type_id", "Property type offers"
+    )
+    offer_count = fields.Integer(compute="_compute_offer_count")
 
     _sql_constraints = [
         (
@@ -140,6 +144,11 @@ class EstatePropertyType(models.Model):
             "Estate property type name must be unique",
         ),
     ]
+
+    def _compute_offer_count(self):
+        for record in self:
+            offers = record.offer_ids
+            record.offer_count = len(offers)
 
 
 class EstatePropertyTag(models.Model):
@@ -171,6 +180,9 @@ class EstatePropertyOffer(models.Model):
         "res.partner", string="Partner", copy=False, required=True
     )
     property_id = fields.Many2one("estate.property", required=True)
+    property_type_id = fields.Many2one(
+        related="property_id.property_type_id", store=True
+    )
 
     _sql_constraints = [
         (
