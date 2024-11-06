@@ -104,6 +104,11 @@ class EstateProperty(models.Model):
                     "You must reduce the expected price if you want to accept this offer."
                 )
 
+    @api.ondelete(at_uninstall=False)
+    def _unlink_if_state_not_new_or_cancelled(self):
+        if any(property.state not in ("new", "cancelled") for property in self):
+            raise UserError("Can't delete estate property if state is new or cancelled")
+
     def sold_property(self):
         if self.state == "cancelled":
             raise UserError("Cancelled properties cannot be sold")
@@ -191,6 +196,20 @@ class EstatePropertyOffer(models.Model):
             "Offer price must be strictly positive",
         ),
     ]
+
+    @api.model
+    def create(self, vals):
+        property = self.env["estate.property"].browse(vals["property_id"])
+        property.state = "offer_received"
+        user_price = vals["price"]
+
+        print(f"User price: {user_price}")
+
+        for offer in self:
+            if user_price < offer.price:
+                raise UserError(f"The offer must be higher than {user_price}")
+
+        return super().create(vals)
 
     def accept_offer(self):
         for record in self:
