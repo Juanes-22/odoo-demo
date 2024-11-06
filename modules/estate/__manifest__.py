@@ -27,6 +27,7 @@ Long description of module's purpose
         'views/estate_property_type_views.xml',
         'views/estate_property_tags_views.xml',
         'views/estate_property_offers_views.xml',
+        'views/estate_property_users_views.xml',
         'views/estate_menus.xml',
         'views/templates.xml',
     ],
